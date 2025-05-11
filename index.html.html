@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2JP Review Center</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: url('background.jpg') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    h1 {
+      color: grey;
+      font-size: 3rem;
+      text-align: center;
+    }
+    .review-buttons {
+      margin-top: 20px;
+      display: flex;
+      gap: 40px;
+      align-items: center;
+    }
+    .review-option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .review-button {
+      background-color: #fcdc3b;
+      padding: 15px 30px;
+      border-radius: 15px;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .review-image {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+    .content-section {
+      display: none;
+      margin-top: 30px;
+      text-align: center;
+    }
+    .module-video-buttons {
+      background-color: grey;
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    .module-video-buttons button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .circle {
+      display: inline-block;
+      width: 20mm;
+      height: 20mm;
+      line-height: 20mm;
+      background-color: yellow;
+      border-radius: 50%;
+      text-align: center;
+      margin: 10px;
+      cursor: pointer;
+    }
+    #codeInputContainer {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to 2JP Review Center!</h1>
+
+  <div id="codeInputContainer">
+    <input type="text" id="accessCode" placeholder="Enter access code">
+    <button onclick="verifyCode()">Submit</button>
+  </div>
+
+  <div class="review-buttons" id="reviewButtons" style="display:none">
+    <div class="review-option">
+      <img src="civil.jpg" alt="Civil Engineering" class="review-image">
+      <button class="review-button" onclick="showSection('civil')">Review for Civil Engineering</button>
+    </div>
+    <div class="review-option">
+      <img src="plumber.jpg" alt="Master Plumber" class="review-image">
+      <button class="review-button" onclick="showSection('plumber')">Review for Master Plumber</button>
+    </div>
+  </div>
+
+  <div id="civil" class="content-section">
+    <div class="module-video-buttons">
+      <button onclick="toggleContent('civil', 'module')">Modules</button>
+      <button onclick="toggleContent('civil', 'video')">Lecture Videos</button>
+    </div>
+    <div class="module-buttons" id="civil-modules"></div>
+    <div class="video-buttons" id="civil-videos"></div>
+  </div>
+
+  <div id="plumber" class="content-section">
+    <div class="module-video-buttons">
+      <button onclick="toggleContent('plumber', 'module')">Modules</button>
+      <button onclick="toggleContent('plumber', 'video')">Lecture Videos</button>
+    </div>
+    <div class="module-buttons" id="plumber-modules"></div>
+    <div class="video-buttons" id="plumber-videos"></div>
+  </div>
+
+  <script>
+    const validCodes = [
+      "2JP-X1A23", "2JP-Z5B78", "2JP-C9T36", "2JP-R8D12", "2JP-K2P45",
+      "2JP-L7E99", "2JP-M4G61", "2JP-B3W88", "2JP-Q6T27", "2JP-F0H51",
+      "2JP-W9N30", "2JP-N1L49", "2JP-T5Y90", "2JP-H2Z75", "2JP-E3K84",
+      "2JP-V6M38", "2JP-A7R65", "2JP-D4X11", "2JP-G3C66", "2JP-Y8J21"
+    ];
+
+    function verifyCode() {
+      const code = document.getElementById('accessCode').value;
+      if (validCodes.includes(code)) {
+        document.getElementById('reviewButtons').style.display = 'flex';
+        document.getElementById('codeInputContainer').style.display = 'none';
+      } else {
+        alert('Invalid access code.');
+      }
+    }
+
+    function showSection(section) {
+      document.querySelectorAll('.content-section').forEach(el => el.style.display = 'none');
+      document.getElementById(section).style.display = 'block';
+    }
+
+    function toggleContent(section, type) {
+      document.getElementById(`${section}-modules`).style.display = type === 'module' ? 'block' : 'none';
+      document.getElementById(`${section}-videos`).style.display = type === 'video' ? 'block' : 'none';
+    }
+
+    function generateCircles(containerId, label, count, links = {}) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      for (let i = 1; i <= count; i++) {
+        const circle = document.createElement('div');
+        circle.className = 'circle';
+        circle.textContent = `${label} ${i}`;
+        if (links[i]) circle.onclick = () => window.open(links[i], '_blank');
+        container.appendChild(circle);
+        if (i % 5 === 0) container.appendChild(document.createElement('br'));
+      }
+    }
+
+    // Populate Master Plumber content
+    generateCircles('plumber-modules', 'Module', 10, {
+      1: 'https://drive.google.com/drive/folders/1XVjJc5XNBKKiz5nfBd9gmgHM9pLsinuJ?usp=sharing'
+    });
+
+    generateCircles('plumber-videos', 'Lecture Video', 20, {
+      1: 'https://drive.google.com/drive/folders/1-QjXPlW9ysIk-egh_yChtUODl9AULkPV?usp=sharing'
+    });
+  </script>
+</body>
+</html>
